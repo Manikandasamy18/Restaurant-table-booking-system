@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Login - Restaurant Booking System{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 500px; margin: 2rem auto;">
+    <div class="card-header">
+        <h2 class="card-title">⚙️ Admin Login</h2>
+        <p class="card-subtitle">Restaurant admin access portal</p>
+    </div>
+    
+    <div class="alert alert-info">
+        <strong>Admin Instructions:</strong><br>
+        • Username: Your restaurant name (e.g., "Valluvar Restaurant", "Thalapakatti Hotel")<br>
+        • Password: admin123 (default for all restaurants)
+    </div>
+    
+    <form method="POST">
+        <div class="form-group">
+            <label class="form-label" for="restaurant_name">Restaurant Name</label>
+            <input type="text" class="form-control" id="restaurant_name" name="restaurant_name" 
+                   placeholder="e.g., Valluvar Restaurant" required>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" 
+                   placeholder="admin123" required>
+        </div>
+        
+        <button type="submit" class="btn btn-warning btn-full">
+            <i class="fas fa-key"></i> Admin Login
+        </button>
+        
+        <div class="text-center mt-3">
+            <p><a href="{{ url_for('index') }}" style="color: #6c757d;">← Back to Home</a></p>
+        </div>
+    </form>
+    
+    <div class="card mt-4">
+        <h4>Available Restaurants for Admin Access:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 1rem;">
+            <li style="padding: 0.5rem; background: #f8f9fa; margin-bottom: 0.5rem; border-radius: 5px;">
+                <strong>Valluvar Restaurant</strong> (Karur) - Pure Veg
+            </li>
+            <li style="padding: 0.5rem; background: #f8f9fa; margin-bottom: 0.5rem; border-radius: 5px;">
+                <strong>Thalapakatti Hotel</strong> (Karur) - Non-Veg
+            </li>
+            <li style="padding: 0.5rem; background: #f8f9fa; margin-bottom: 0.5rem; border-radius: 5px;">
+                <strong>Saravana Bhavan</strong> (Chennai) - Pure Veg
+            </li>
+            <li style="padding: 0.5rem; background: #f8f9fa; margin-bottom: 0.5rem; border-radius: 5px;">
+                <strong>Buhari Hotel</strong> (Chennai) - Multi-cuisine
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

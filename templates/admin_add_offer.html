@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Add Special Offer - {{ session.admin_restaurant_name }}{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 2rem auto;">
+    <div class="card-header">
+        <h2 class="card-title">🎉 Add Special Offer</h2>
+        <p class="card-subtitle">Create a special offer for {{ session.admin_restaurant_name }}</p>
+    </div>
+    
+    <form method="POST">
+        <div class="form-group">
+            <label class="form-label" for="title">Offer Title</label>
+            <input type="text" class="form-control" id="title" name="title" 
+                   placeholder="e.g., Weekend Special" required>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label" for="description">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" 
+                      placeholder="Describe your special offer..." required></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label" for="discount_percentage">Discount Percentage</label>
+            <input type="number" class="form-control" id="discount_percentage" name="discount_percentage" 
+                   min="1" max="50" placeholder="e.g., 20" required>
+        </div>
+        
+        <div class="grid grid-2">
+            <div class="form-group">
+                <label class="form-label" for="valid_from">Valid From</label>
+                <input type="date" class="form-control" id="valid_from" name="valid_from" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="valid_to">Valid To</label>
+                <input type="date" class="form-control" id="valid_to" name="valid_to" required>
+            </div>
+        </div>
+        
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-plus"></i> Create Offer
+            </button>
+            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </form>
+</div>
+
+<div class="card" style="max-width: 600px; margin: 2rem auto;">
+    <h4>💡 Offer Tips</h4>
+    <ul style="list-style: none; padding: 0;">
+        <li style="padding: 0.5rem 0; border-bottom: 1px solid #e1e5e9;">
+            <i class="fas fa-lightbulb text-warning"></i> 
+            <strong>Weekend Specials:</strong> Attract more customers during weekends
+        </li>
+        <li style="padding: 0.5rem 0; border-bottom: 1px solid #e1e5e9;">
+            <i class="fas fa-lightbulb text-warning"></i> 
+            <strong>Lunch Deals:</strong> Offer discounts during lunch hours
+        </li>
+        <li style="padding: 0.5rem 0; border-bottom: 1px solid #e1e5e9;">
+            <i class="fas fa-lightbulb text-warning"></i> 
+            <strong>Festival Offers:</strong> Create special offers during festivals
+        </li>
+        <li style="padding: 0.5rem 0;">
+            <i class="fas fa-lightbulb text-warning"></i> 
+            <strong>Group Discounts:</strong> Encourage larger party bookings
+        </li>
+    </ul>
+</div>
+
+<script>
+    // Set minimum dates to today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('valid_from').min = today;
+    document.getElementById('valid_to').min = today;
+    
+    // Ensure valid_to is after valid_from
+    document.getElementById('valid_from').addEventListener('change', function() {
+        document.getElementById('valid_to').min = this.value;
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}{{ restaurant.name }} - Restaurant Booking System{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="card-title">{{ restaurant.name }}</h2>
+            <p class="restaurant-cuisine">{{ restaurant.cuisine_type }}</p>
+            {% if restaurant.is_veg_only %}
+                <span class="veg-badge">🌱 Pure Vegetarian</span>
+            {% else %}
+                <span class="non-veg-badge">🍖 Multi-cuisine</span>
+            {% endif %}
+        </div>
+        <div class="restaurant-image" style="width: 150px; height: 150px; font-size: 4rem;">
+            {% if restaurant.cuisine_type == 'South Indian' %}🥘
+            {% elif restaurant.cuisine_type == 'Biryani' %}🍛
+            {% elif restaurant.cuisine_type == 'Chettinad' %}🌶️
+            {% elif restaurant.cuisine_type == 'Multi-cuisine' %}🍽️
+            {% else %}🍴
+            {% endif %}
+        </div>
+    </div>
+    
+    <p class="restaurant-description">{{ restaurant.description }}</p>
+    
+    <div class="d-flex gap-2 mt-3">
+        <a href="{{ url_for('view_menu', restaurant_id=restaurant.id) }}" class="btn btn-secondary">
+            <i class="fas fa-list"></i> View Menu
+        </a>
+        <a href="{{ url_for('rate_restaurant', restaurant_id=restaurant.id) }}" class="btn btn-warning">
+            <i class="fas fa-star"></i> Rate Restaurant
+        </a>
+    </div>
+</div>
+
+{% if special_offers %}
+<div class="card">
+    <h3 class="card-title">🎉 Special Offers</h3>
+    {% for offer in special_offers %}
+    <div class="offer-card">
+        <div class="offer-title">{{ offer.title }}</div>
+        <div class="offer-description">{{ offer.description }}</div>
+        <div class="offer-discount">{{ offer.discount_percentage }}% OFF</div>
+        <small>Valid from {{ offer.valid_from }} to {{ offer.valid_to }}</small>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="card">
+    <h3 class="card-title">📅 Book a Table</h3>
+    
+    {% if tables %}
+    <p class="card-subtitle mb-3">Select an available table and choose your preferred date and time</p>
+    
+    <form method="POST" action="{{ url_for('book_table') }}">
+        <input type="hidden" name="restaurant_id" value="{{ restaurant.id }}">
+        <input type="hidden" id="selected_table_id" name="table_id" value="">
+        
+        <div class="form-group">
+            <label class="form-label">Available Tables</label>
+            <div class="table-grid">
+                {% for table in tables %}
+                <div class="table-card" onclick="selectTable({{ table.id }}, this)">
+                    <div class="table-number">Table {{ table.table_number }}</div>
+                    <div class="table-capacity">Capacity: {{ table.capacity }} people</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="grid grid-3">
+            <div class="form-group">
+                <label class="form-label" for="booking_date">Date</label>
+                <input type="date" class="form-control" id="booking_date" name="booking_date" 
+                       min="{{ today }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="booking_time">Time</label>
+                <select class="form-control" id="booking_time" name="booking_time" required>
+                    <option value="">Select Time</option>
+                    <option value="11:00">11:00 AM</option>
+                    <option value="11:30">11:30 AM</option>
+                    <option value="12:00">12:00 PM</option>
+                    <option value="12:30">12:30 PM</option>
+                    <option value="13:00">1:00 PM</option>
+                    <option value="13:30">1:30 PM</option>
+                    <option value="14:00">2:00 PM</option>
+                    <option value="18:00">6:00 PM</option>
+                    <option value="18:30">6:30 PM</option>
+                    <option value="19:00">7:00 PM</option>
+                    <option value="19:30">7:30 PM</option>
+                    <option value="20:00">8:00 PM</option>
+                    <option value="20:30">8:30 PM</option>
+                    <option value="21:00">9:00 PM</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="party_size">Party Size</label>
+                <select class="form-control" id="party_size" name="party_size" required>
+                    <option value="">Select Size</option>
+                    <option value="1">1 Person</option>
+                    <option value="2">2 People</option>
+                    <option value="3">3 People</option>
+                    <option value="4">4 People</option>
+                    <option value="5">5 People</option>
+                    <option value="6">6 People</option>
+                    <option value="7">7 People</option>
+                    <option value="8">8 People</option>
+                </select>
+            </div>
+        </div>
+        
+        <button type="submit" id="book_button" class="btn btn-success btn-full" disabled>
+            <i class="fas fa-calendar-check"></i> Book Table
+        </button>
+    </form>
+    {% else %}
+    <div class="alert alert-danger">
+        <h4>No Tables Available</h4>
+        <p>Sorry, all tables are currently booked. Please try another restaurant or check back later.</p>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    // Set minimum date to today
+    document.getElementById('booking_date').min = new Date().toISOString().split('T')[0];
+</script>
+{% endblock %}

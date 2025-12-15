@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Restaurant Booking System{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    {% if session.user_id or session.admin_restaurant_id %}
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">🍽️ RestaurantBook</div>
+            <ul class="nav-links">
+                {% if session.user_id %}
+                    <li><a href="{{ url_for('select_location') }}">Home</a></li>
+                    <li><span>Welcome, {{ session.username }}!</span></li>
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                {% elif session.admin_restaurant_id %}
+                    <li><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('admin_add_offer') }}">Add Offer</a></li>
+                    <li><span>Admin: {{ session.admin_restaurant_name }}</span></li>
+                    <li><a href="{{ url_for('admin_logout') }}">Logout</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    {% endif %}
+
+    <main class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-info">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <script>
+        // Table selection functionality
+        function selectTable(tableId, element) {
+            // Remove selected class from all tables
+            document.querySelectorAll('.table-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked table
+            element.classList.add('selected');
+            
+            // Set hidden input value
+            document.getElementById('selected_table_id').value = tableId;
+            
+            // Enable book button
+            document.getElementById('book_button').disabled = false;
+        }
+
+        // Star rating functionality
+        function setRating(rating, category) {
+            const stars = document.querySelectorAll(`.${category}-stars .star`);
+            const input = document.getElementById(category);
+            
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+            
+            input.value = rating;
+        }
+
+        // Initialize star ratings
+        document.addEventListener('DOMContentLoaded', function() {
+            const ratingCategories = ['customer_service', 'food_quality', 'respect'];
+            
+            ratingCategories.forEach(category => {
+                const stars = document.querySelectorAll(`.${category}-stars .star`);
+                stars.forEach((star, index) => {
+                    star.addEventListener('click', () => setRating(index + 1, category));
+                });
+            });
+        });
+    </script>
+</body>
+</html>

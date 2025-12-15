@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Restaurant Booking System{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1 class="hero-title">🍽️ Restaurant Booking System</h1>
+    <p class="hero-subtitle">Discover and book tables at the best restaurants in Tamil Nadu</p>
+    
+    <div class="hero-buttons">
+        <a href="{{ url_for('login') }}" class="btn btn-primary">
+            <i class="fas fa-user"></i> User Login
+        </a>
+        <a href="{{ url_for('register') }}" class="btn btn-secondary">
+            <i class="fas fa-user-plus"></i> Register
+        </a>
+        <a href="{{ url_for('admin_login') }}" class="btn btn-warning">
+            <i class="fas fa-cog"></i> Admin Login
+        </a>
+    </div>
+</div>
+
+<div class="grid grid-3">
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-map-marker-alt" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+            <h3 class="card-title">Choose Location</h3>
+            <p class="card-subtitle">Select from cities across Tamil Nadu</p>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-utensils" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+            <h3 class="card-title">Browse Restaurants</h3>
+            <p class="card-subtitle">Discover amazing restaurants in your area</p>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-calendar-check" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+            <h3 class="card-title">Book Your Table</h3>
+            <p class="card-subtitle">Reserve your perfect dining experience</p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Featured Cities</h3>
+        <p class="card-subtitle">Popular dining destinations in Tamil Nadu</p>
+    </div>
+    
+    <div class="location-grid">
+        <div class="location-card">
+            <div class="location-icon">🏛️</div>
+            <div class="location-name">Chennai</div>
+        </div>
+        <div class="location-card">
+            <div class="location-icon">🏰</div>
+            <div class="location-name">Madurai</div>
+        </div>
+        <div class="location-card">
+            <div class="location-icon">🌿</div>
+            <div class="location-name">Karur</div>
+        </div>
+        <div class="location-card">
+            <div class="location-icon">🏔️</div>
+            <div class="location-name">Salem</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

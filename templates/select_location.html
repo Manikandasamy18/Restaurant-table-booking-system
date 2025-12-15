@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Select Location - Restaurant Booking System{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">📍 Choose Your Location</h2>
+        <p class="card-subtitle">Select a city to find restaurants near you</p>
+    </div>
+    
+    <div class="location-grid">
+        {% for location in locations %}
+        <a href="{{ url_for('restaurants_by_location', location_id=location.id) }}" class="location-card">
+            <div class="location-icon">
+                {% if location.city_name == 'Chennai' %}🏛️
+                {% elif location.city_name == 'Madurai' %}🏰
+                {% elif location.city_name == 'Karur' %}🌿
+                {% elif location.city_name == 'Salem' %}🏔️
+                {% elif location.city_name == 'Coimbatore' %}🏭
+                {% elif location.city_name == 'Trichy' %}🏛️
+                {% elif location.city_name == 'Dindigul' %}🍽️
+                {% elif location.city_name == 'Erode' %}🌾
+                {% else %}🏙️
+                {% endif %}
+            </div>
+            <div class="location-name">{{ location.city_name }}</div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Popular Destinations</h3>
+    </div>
+    
+    <div class="grid grid-2">
+        <div class="card">
+            <h4>🏛️ Chennai</h4>
+            <p>The capital city with diverse dining options from traditional South Indian to international cuisine.</p>
+        </div>
+        
+        <div class="card">
+            <h4>🏰 Madurai</h4>
+            <p>Temple city famous for authentic Chettinad cuisine and traditional Tamil dishes.</p>
+        </div>
+        
+        <div class="card">
+            <h4>🌿 Karur</h4>
+            <p>Known for its pure vegetarian restaurants and authentic Dindigul biryani joints.</p>
+        </div>
+        
+        <div class="card">
+            <h4>🏔️ Salem</h4>
+            <p>Hill station cuisine with a mix of traditional and contemporary dining experiences.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

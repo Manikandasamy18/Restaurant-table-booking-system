@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Restaurants in {{ location.city_name }} - Restaurant Booking System{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">🍽️ Restaurants in {{ location.city_name }}</h2>
+        <p class="card-subtitle">Choose from our featured restaurants</p>
+    </div>
+    
+    <a href="{{ url_for('select_location') }}" class="btn btn-secondary mb-3">
+        <i class="fas fa-arrow-left"></i> Change Location
+    </a>
+</div>
+
+{% if restaurants %}
+<div class="grid grid-2">
+    {% for restaurant in restaurants %}
+    <div class="restaurant-card">
+        <div class="restaurant-image">
+            {% if restaurant.cuisine_type == 'South Indian' %}🥘
+            {% elif restaurant.cuisine_type == 'Biryani' %}🍛
+            {% elif restaurant.cuisine_type == 'Chettinad' %}🌶️
+            {% elif restaurant.cuisine_type == 'Multi-cuisine' %}🍽️
+            {% else %}🍴
+            {% endif %}
+        </div>
+        <div class="restaurant-content">
+            <h3 class="restaurant-name">{{ restaurant.name }}</h3>
+            <p class="restaurant-cuisine">{{ restaurant.cuisine_type }}</p>
+            <p class="restaurant-description">{{ restaurant.description }}</p>
+            
+            {% if restaurant.is_veg_only %}
+                <span class="veg-badge">🌱 Pure Vegetarian</span>
+            {% else %}
+                <span class="non-veg-badge">🍖 Multi-cuisine</span>
+            {% endif %}
+            
+            {% if restaurant.avg_rating %}
+            <div class="rating">
+                <span class="stars">
+                    {% for i in range(5) %}
+                        {% if i < restaurant.avg_rating|round %}
+                            <i class="fas fa-star"></i>
+                        {% else %}
+                            <i class="far fa-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                </span>
+                <span>({{ "%.1f"|format(restaurant.avg_rating) }})</span>
+            </div>
+            {% endif %}
+            
+            <div class="d-flex gap-2 mt-3">
+                <a href="{{ url_for('restaurant_details', restaurant_id=restaurant.id) }}" class="btn btn-primary">
+                    <i class="fas fa-calendar-plus"></i> Book Table
+                </a>
+                <a href="{{ url_for('view_menu', restaurant_id=restaurant.id) }}" class="btn btn-secondary">
+                    <i class="fas fa-list"></i> View Menu
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card">
+    <div class="text-center">
+        <h3>No restaurants found in {{ location.city_name }}</h3>
+        <p>We're working on adding more restaurants to this location.</p>
+        <a href="{{ url_for('select_location') }}" class="btn btn-primary">
+            <i class="fas fa-arrow-left"></i> Choose Another Location
+        </a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

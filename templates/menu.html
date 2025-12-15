@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Menu - {{ restaurant.name }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">📋 {{ restaurant.name }} Menu</h2>
+        <p class="restaurant-cuisine">{{ restaurant.cuisine_type }}</p>
+        {% if restaurant.is_veg_only %}
+            <span class="veg-badge">🌱 Pure Vegetarian Menu</span>
+        {% else %}
+            <span class="non-veg-badge">🍖 Multi-cuisine Menu</span>
+        {% endif %}
+    </div>
+    
+    <div class="d-flex gap-2 mb-3">
+        <a href="{{ url_for('restaurant_details', restaurant_id=restaurant.id) }}" class="btn btn-primary">
+            <i class="fas fa-arrow-left"></i> Back to Restaurant
+        </a>
+        <a href="{{ url_for('restaurant_details', restaurant_id=restaurant.id) }}" class="btn btn-success">
+            <i class="fas fa-calendar-plus"></i> Book Table
+        </a>
+    </div>
+</div>
+
+{% if menu_items %}
+    {% set categories = menu_items|groupby('category') %}
+    {% for category, items in categories %}
+    <div class="menu-category">
+        <h3 class="category-title">
+            {% if category == 'Breakfast' %}🌅
+            {% elif category == 'Lunch' %}🍽️
+            {% elif category == 'Dinner' %}🌙
+            {% elif category == 'Starters' %}🥗
+            {% elif category == 'Main Course' %}🍛
+            {% elif category == 'Beverages' %}🥤
+            {% elif category == 'Desserts' %}🍰
+            {% else %}🍴
+            {% endif %}
+            {{ category }}
+        </h3>
+        
+        {% for item in items %}
+        <div class="menu-item">
+            <div class="menu-item-info">
+                <h4>
+                    {{ item.item_name }}
+                    {% if item.is_veg %}
+                        <span style="color: #28a745;">🌱</span>
+                    {% else %}
+                        <span style="color: #dc3545;">🍖</span>
+                    {% endif %}
+                </h4>
+                <p class="menu-item-description">{{ item.description }}</p>
+            </div>
+            <div class="menu-item-price">₹{{ item.price }}</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+{% else %}
+<div class="card">
+    <div class="text-center">
+        <h3>Menu Coming Soon</h3>
+        <p>We're working on updating the menu for this restaurant.</p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
